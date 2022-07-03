@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Bézier Curve</title>
+    <link rel="stylesheet" href="css/index.css">
+  </head>
+  <body>
+    <div id="side-bar">
+      <button onclick="changeType('move')">
+        <img src="./assets/img/icons/move.png" alt="move">
+      </button>
+      <button onclick="changeType('pointer')">
+        <img src="./assets/img/icons/pointer.png" alt="pointer">
+      </button>
+      <button onclick="changeType('anchor')">
+        <img src="./assets/img/icons/anchor.png" alt="anchor">
+      </button>
+    </div>
+    <canvas id="canvas-screen" currentType="move"></canvas>
+    <script src="js/index.js"></script>
+    <script src="js/point.js"></script>
+    <script src="js/bezier.js"></script>
+    <script src="js/control.js"></script>
+  </body>
+</html>
