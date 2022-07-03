@@ -65,7 +65,7 @@ html, body {
 }
 
 #canvas-screen[currentType="pointer"] {
-  cursor: crosshair;
+  cursor: default;
 }
 
 #canvas-screen[currentType="anchor"] {

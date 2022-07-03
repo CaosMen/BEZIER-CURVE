@@ -1,10 +1,18 @@
-/* Movement Handler */
+/* Interface controls */
 
 function changeType(type) {
   clickType = type;
 
   document.getElementById('canvas-screen').setAttribute('currentType', type);
 }
+
+function clearPoints() {
+  points.clear();
+
+  draw();
+}
+
+/* Movement limits */
 
 function moveHandler(moveX, moveY) {
   const transform = ctx.getTransform();
@@ -59,8 +67,6 @@ const mouseUp = (e) => {
     case 'move':
       start = null;
       break;
-    case 'pointer':
-      break;
     case 'anchor':
       start = null;
       break;
@@ -73,8 +79,6 @@ const mouseLeave = (e) => {
   switch (clickType) {
     case 'move':
       start = null;
-      break;
-    case 'pointer':
       break;
     case 'anchor':
       start = null;
@@ -92,15 +96,13 @@ const mouseDown = (e) => {
     case 'pointer':
       const point = getPosCanvas(e);
 
-      points.push(new Point(point.x, point.y));
+      points.add(new Point(point.x, point.y));
       draw();
       break;
     case 'anchor':
       const clickPos = getPosCanvas(e);
 
-      start = points.findIndex((point) => {
-        return point.anchor.x === clickPos.x && point.anchor.y === clickPos.y;
-      });
+      start = points.getPointAndAnchorIndexes(clickPos.x, clickPos.y);
       break;
     default:
       break;
@@ -126,9 +128,6 @@ const mouseMove = (e) => {
       draw();
       start = posMove;
       break;
-    case 'pointer':
-      
-      break;
     case 'anchor':
       if (start === null) {
         return;
@@ -136,10 +135,10 @@ const mouseMove = (e) => {
 
       const posAnchor = getPosCanvas(e);
 
-      const point = points[start];
+      const point = points.getAnchor(start[0], start[1]);
 
-      point.anchor.x = posAnchor.x;
-      point.anchor.y = posAnchor.y;
+      point.x = posAnchor.x;
+      point.y = posAnchor.y;
 
       draw();
       break;

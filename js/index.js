@@ -14,7 +14,7 @@ const squareGridThickness = 1;
 
 /* Canvas variables */
 
-const points = [];
+const points = new Points();
 
 window.onload = window.onresize = () => {
   canvas.addEventListener('mouseup', mouseUp);
@@ -68,8 +68,8 @@ function drawGrid() {
 }
 
 function drawLines() {
-  points.forEach((point, index) => {
-    const nextPoint = points[index + 1];
+  points.getPoints().forEach((point, index) => {
+    const nextPoint = points.getPoint(index + 1);
 
     ['position', 'anchor'].forEach((type) => {
       if (type === 'position') {
@@ -83,12 +83,17 @@ function drawLines() {
         ctx.lineWidth =  3;
         ctx.setLineDash([5, 5]);
 
-        ctx.moveTo(point.x, point.y);
-        ctx.lineTo(point.anchor.x, point.anchor.y);
+        if (index !== points.getCount() - 1) {
+          ctx.moveTo(point.x, point.y);
+          ctx.lineTo(point.anchor[1].x, point.anchor[1].y);
 
-        if (nextPoint) {
-          ctx.moveTo(point.anchor.x, point.anchor.y);
-          ctx.lineTo(nextPoint.anchor.x, nextPoint.anchor.y);
+          if (nextPoint) {
+            ctx.moveTo(point.anchor[1].x, point.anchor[1].y);
+            ctx.lineTo(nextPoint.anchor[0].x, nextPoint.anchor[0].y);
+
+            ctx.moveTo(nextPoint.anchor[0].x, nextPoint.anchor[0].y);
+            ctx.lineTo(nextPoint.x, nextPoint.y);
+          }
         }
 
         ctx.strokeStyle = point.anchor.stroke;
@@ -101,21 +106,31 @@ function drawLines() {
 }
 
 function drawPoints() {
-  points.forEach((point) => {
+  points.getPoints().forEach((point) => {
     ['position', 'anchor'].forEach((type) => {
-      ctx.beginPath();
-
-      const x = type === 'position' ? point.x : point.anchor.x;
-      const y = type === 'position' ? point.y : point.anchor.y;
-
-      ctx.arc(x, y, 10, 0, 2 * Math.PI);
-
-      ctx.fillStyle = point.color;
-      ctx.fill();
-
-      ctx.strokeStyle = point.stroke;
-      ctx.lineWidth = 2;
-      ctx.stroke();
+      if (type === 'position') {
+        drawPoint(point.x, point.y, point.color, point.stroke);
+      } else {
+        if (points.getCount() > 1) {
+          point.anchor.forEach((anchor) => {
+            if (anchor.visible) {
+              drawPoint(anchor.x, anchor.y, anchor.color, anchor.stroke);
+            }
+          });
+        }
+      }
     });
   });
+}
+
+function drawPoint(x, y, color, stroke) {
+  ctx.beginPath();
+  ctx.arc(x, y, 10, 0, 2 * Math.PI);
+
+  ctx.fillStyle = color;
+  ctx.fill();
+
+  ctx.strokeStyle = stroke;
+  ctx.lineWidth = 2;
+  ctx.stroke();
 }
