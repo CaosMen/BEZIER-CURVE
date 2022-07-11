@@ -2,27 +2,43 @@
   <head>
     <meta charset="utf-8">
     <title>Bézier Curve</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/index.css">
   </head>
   <body>
-    <div id="side-bar">
-      <button onclick="changeType('move')">
+    <div id="side-bar" currentType="move">
+      <button class="move" onclick="changeType('move')">
         <img src="./assets/img/icons/move.png" alt="move">
       </button>
-      <button onclick="changeType('pointer')">
+      <button class="pointer" onclick="changeType('pointer')">
         <img src="./assets/img/icons/pointer.png" alt="pointer">
       </button>
-      <button onclick="changeType('anchor')">
+      <button class="anchor" onclick="changeType('anchor')">
         <img src="./assets/img/icons/anchor.png" alt="anchor">
       </button>
       <button onclick="clearPoints()">
         <img src="./assets/img/icons/trash.png" alt="clear">
       </button>
     </div>
+    <div id="bottom-bar">
+      <button onclick="curvature()">
+        <span>
+          Curvatura
+        </span>
+      </button>
+      <button onclick="derivative()">
+        <span>
+          Derivada
+        </span>
+      </button>
+    </div>
     <canvas id="canvas-screen" currentType="move"></canvas>
     <script src="js/control.js"></script>
     <script src="js/points.js"></script>
     <script src="js/bezier.js"></script>
+    <script src="js/utils.js"></script>
     <script src="js/index.js"></script>
   </body>
 </html>

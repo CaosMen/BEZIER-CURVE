@@ -4,12 +4,14 @@ function changeType(type) {
   clickType = type;
 
   document.getElementById('canvas-screen').setAttribute('currentType', type);
+  document.getElementById('side-bar').setAttribute('currentType', type);
 }
 
 function clearPoints() {
-  points.clear();
-
-  draw();
+  if (!pauseActions) {
+    points.clear();
+    draw();
+  }
 }
 
 /* Movement limits */
@@ -94,15 +96,19 @@ const mouseDown = (e) => {
       start = getPos(e);
       break;
     case 'pointer':
-      const point = getPosCanvas(e);
+      if (!pauseActions) {
+        const point = getPosCanvas(e);
 
-      points.add(new Point(point.x, point.y));
-      draw();
+        points.add(new Point(point.x, point.y));
+        draw();
+      }
       break;
     case 'anchor':
-      const clickPos = getPosCanvas(e);
+      if (!pauseActions) {
+        const clickPos = getPosCanvas(e);
 
-      start = points.getPointAndAnchorIndexes(clickPos.x, clickPos.y);
+        start = points.getPointAndAnchorIndexes(clickPos.x, clickPos.y);
+      }
       break;
     default:
       break;
@@ -129,18 +135,20 @@ const mouseMove = (e) => {
       start = posMove;
       break;
     case 'anchor':
-      if (start === null) {
-        return;
-      };
+      if (!pauseActions) {
+        if (start === null) {
+          return;
+        };
 
-      const posAnchor = getPosCanvas(e);
+        const posAnchor = getPosCanvas(e);
 
-      const point = points.getAnchor(start[0], start[1]);
+        const point = points.getAnchor(start[0], start[1]);
 
-      point.x = posAnchor.x;
-      point.y = posAnchor.y;
+        point.x = posAnchor.x;
+        point.y = posAnchor.y;
 
-      draw();
+        draw();
+      }
       break;
     default:
       break;
